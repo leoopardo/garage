@@ -1,4 +1,4 @@
-import { Button, Image, StyleSheet, View } from "react-native";
+import { Button, Image, Pressable, StyleSheet, View } from "react-native";
 
 import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { Steps } from "@/components/Steps";
@@ -6,6 +6,7 @@ import { ThemedText } from "@/components/ThemedText";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { useState } from "react";
+import { Link } from "expo-router";
 
 export default function HomeScreen() {
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -78,10 +79,23 @@ export default function HomeScreen() {
           {steps[currentStep].subtitle}
         </ThemedText>
       </View>
-      <Button
-        title={steps[currentStep].next.title}
+
+      <Pressable
         onPress={steps[currentStep].next.onPress}
-      />
+        style={({ pressed }) => [
+          styles.nextButton,
+          {
+            backgroundColor: pressed
+              ? Colors[theme as "dark" | "light"].tintPressed
+              : Colors[theme as "dark" | "light"].tint,
+          },
+        ]}
+      >
+        <ThemedText style={{ color: "white" }} type="subtitle">
+          {steps[currentStep].next.title}
+        </ThemedText>
+      </Pressable>
+
       <View
         style={{
           ...styles.footerBotonsContainer,
@@ -89,13 +103,13 @@ export default function HomeScreen() {
         }}
       >
         {currentStep >= 1 && (
-          <Button
-            color={Colors[theme as "dark" | "light"].background}
-            title="Voltar"
-            onPress={() => setCurrentStep((step) => step - 1)}
-          />
+          <Pressable onPress={steps[currentStep].next.onPress}>
+            <ThemedText type="default">Voltar</ThemedText>
+          </Pressable>
         )}
-        <Button title="Pular" />
+        <Link href="/">
+          <ThemedText type="link">Pular</ThemedText>
+        </Link>
       </View>
     </ParallaxScrollView>
   );
@@ -125,7 +139,11 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 16,
     backgroundColor: Colors.light.tint,
-    height: 48,
+    height: 55,
+    borderRadius: 36,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   reactLogo: {
     height: "100%",

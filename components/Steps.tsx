@@ -11,10 +11,7 @@ export function Steps({
   current: number;
 }) {
   const theme = useColorScheme() ?? "light";
-
-  console.log(new Array(steps).fill('null'));
   
-
   const getStepSize = (index: number) => {
     const middleIndex = Math.floor((steps - 1) / 2);
     const distanceFromMiddle = Math.abs(index - middleIndex);
@@ -37,7 +34,7 @@ export function Steps({
               height: stepSize / 2, // altura proporcional
               backgroundColor:
                 index + 1 === current
-                  ? styles.stepActive.backgroundColor
+                  ? Colors[theme as "dark" | "light"].tint
                   : styles.stepInactive.backgroundColor,
             }}
           />
@@ -57,9 +54,6 @@ const styles = StyleSheet.create({
   },
   step: {
     borderRadius: 8,
-  },
-  stepActive: {
-    backgroundColor: Colors.light.tint,
   },
   stepInactive: {
     backgroundColor: Colors.light.icon,
